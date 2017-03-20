@@ -1,6 +1,7 @@
 package edu.upi.cs.yudiwbs.kkcrawler;
 
 import java.io.*;
+import java.net.Authenticator;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -9,6 +10,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
+import java.util.Scanner;
 
 /**
  * Created by yudiwbs on 15/03/2017.
@@ -39,6 +41,7 @@ public class Crawler {
         try {
             // get URL conten
             url = new URL(strUrl);
+            //url = new URL("http://yuliadi.com/");
             System.out.println("Crawl:"+strUrl);   //nanti pake logger?
             URLConnection conn = url.openConnection();
 
@@ -64,6 +67,9 @@ public class Crawler {
         }
         return sb.toString();
     }
+
+
+
 
     /*
         loop crawl

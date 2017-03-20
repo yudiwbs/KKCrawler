@@ -1,6 +1,8 @@
 package edu.upi.cs.yudiwbs.kkcrawler;
 
+import javax.swing.*;
 import java.io.BufferedReader;
+import java.io.Console;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
@@ -14,16 +16,29 @@ import java.net.URLConnection;
 
 
 public class Coba {
-    public static void main(String[] args) {
 
-        String s = "c:\\dir\\dir2";
-
-        String s2 = s.substring(s.length() - 1);
-        if (!s2.equals("\\")) {
-            s = s + "\\";
+    public void passwordExample() {
+        Console console = System.console();
+        if (console == null) {
+            System.out.println("Couldn't get Console instance");
+            System.exit(0);
         }
 
-        System.out.println(s);
+        console.printf("Testing password%n");
+        char passwordArray[] = console.readPassword("Enter your secret password: ");
+        console.printf("Password entered was: %s%n", new String(passwordArray));
 
+    }
+
+    public static void main(String[] args) {
+        final String passwd;
+        final String message = "Enter password";
+        if( System.console() == null ) {
+            final JPasswordField pf = new JPasswordField();
+            passwd = JOptionPane.showConfirmDialog( null, pf, message,
+                    JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE ) == JOptionPane.OK_OPTION
+                    ? new String( pf.getPassword() ) : "";
+        } else
+            passwd = new String( System.console().readPassword( "%s> ", message ) );
     }
 }
