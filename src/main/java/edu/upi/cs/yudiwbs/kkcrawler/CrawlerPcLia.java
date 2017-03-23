@@ -38,7 +38,7 @@ public class CrawlerPcLia {
         //~/corpus/kaskus/aylaagya/
         c.outFileName  = "livina_part3";  //nanti jadi namafile_0001.txt dst
         c.seed = "https://www.kaskus.co.id/thread/535890e2c3cb172c3e8b49c0/klik--komunitas-livina-kaskus----part-3/";
-        c.startPage =1 ;  //halaman satu biasanya pengumuman
+        c.startPage =11 ;  //halaman satu biasanya pengumuman
         c.endPage = 500;    //hati2, kaskus walaupun sudah kelewat tetap akan memberikan hasil (halaman terakhir)
         c.startCrawl();
     }
