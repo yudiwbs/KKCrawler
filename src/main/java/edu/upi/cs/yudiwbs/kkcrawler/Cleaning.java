@@ -7,6 +7,7 @@ import org.jsoup.select.Elements;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * Created by yudiwbs on 18/03/2017.
@@ -37,9 +38,16 @@ public class Cleaning {
     String inputDir = "";
     String outputDir = "";
 
+    private class QA {
+        String file;
+        String url;
+        String q;
+        String a;
+    }
+
 
     public static void main(String[] args) {
-        String strFile = "D:\\corpus\\kaskus_mobilio\\mentah\\mobilio_00010.txt"; //untuk test
+        String strFile = "D:\\corpus\\kaskus\\mobilio\\mentah\\mobilio_00010.txt"; //untuk test
         System.out.println("Proses cleaning");
         File input = new File(strFile);
         Document doc = null;
@@ -49,25 +57,30 @@ public class Cleaning {
             e.printStackTrace();
         }
 
-
-
         // img with src ending .png
 
         //Element el1 = doc.select("div.post").first();
         //System.out.println(el1.text());
         Elements els = doc.select("div.post");
+        ArrayList arQA = new ArrayList<>();
         for (Element el:els) {
             Elements elsQuote = el.select("span.post-quote");
-            String isi = el.text();
-            System.out.println("isi:"+isi);
+            String oldIsi = el.text();
+            String isi = oldIsi;
+
             System.out.println();
             System.out.println(el);
             System.out.println("=======>");
+
             for (Element el2:elsQuote) {
+
                 System.out.println(el2.text());
-                isi.replace(el2.text()," [] ");
+                isi = isi.replace(el2.text()," [] ");
                 System.out.println("###");
             }
+            System.out.println("===");
+            System.out.println("isi awal:"+oldIsi);
+            System.out.println("isi setelah dipisahkan:"+isi);
             System.out.println("=======>");
         }
 
