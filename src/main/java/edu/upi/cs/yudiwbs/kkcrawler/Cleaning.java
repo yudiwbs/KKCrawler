@@ -41,6 +41,8 @@ public class Cleaning {
 
     private class QA {
         int id;
+        String teksSumber;          //untuk debug: string lengkap quote dan jawaban
+        String teksSumberProses;    //untu debug
         String file;
         String url;
         String question;
@@ -56,7 +58,11 @@ public class Cleaning {
     }
 
     public void proses() {
-        String strFile = "D:\\corpus\\kaskus\\mobilio\\mentah\\mobilio_00010.txt"; //untuk test
+        //String strFile = "D:\\corpus\\kaskus\\mobilio\\mentah\\mobilio_00010.txt"; //untuk test
+
+        String dir ="C:\\yudiwbs\\datamentah\\mentah\\";
+        String file ="mobilio_00002.txt";
+        String strFile = dir+file;
         System.out.println("Proses cleaning");
         File input = new File(strFile);
         Document doc = null;
@@ -83,8 +89,6 @@ public class Cleaning {
             element.remove();
         }
 
-
-
         for (Element el:els) {
             //ambil quote
             Elements elsQuote = el.select("span.post-quote");
@@ -92,7 +96,7 @@ public class Cleaning {
             String isi = oldIsi;
 
             System.out.println();
-            System.out.println(el);
+            //System.out.println(el);
             System.out.println("Elemen div.post:");
             System.out.println("==============>");
 
@@ -133,7 +137,12 @@ public class Cleaning {
                 String[] splitIsi = isi.split("\\[" + qa.id + "\\]");
                 if (splitIsi.length>1) {
                     //System.out.println("ans =" + splitIsi[1]);
-                    qa.anwser = splitIsi[1].replaceAll("\\[[0-9]+\\]"," "); //hapus quote yg lain kalau ada
+                    qa.anwser = splitIsi[1].replaceAll("\\[[0-9]+\\]"," ").trim(); //hapus quote yg lain kalau ada
+                    if (qa.anwser.equals("")) {
+                        System.out.println("******************************************************** answer kosong ******");
+                        //jawaban kosong, ambil string di depan
+                        qa.anwser = splitIsi[0].replaceAll("\\[[0-9]+\\]"," ").trim(); //hapus quote yg lain kalau ada
+                    }
                 }
             }
 
