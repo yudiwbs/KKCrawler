@@ -59,8 +59,8 @@ public class Cleaning {
 
     public void proses() {
         //String strFile = "D:\\corpus\\kaskus\\mobilio\\mentah\\mobilio_00010.txt"; //untuk test
-
-        String dir ="C:\\yudiwbs\\datamentah\\mentah\\";
+        //String dir ="C:\\yudiwbs\\datamentah\\mentah\\";
+        String dir = "D:\\corpus\\kaskus\\mobilio\\mentah\\";
         String file ="mobilio_00002.txt";
         String strFile = dir+file;
         System.out.println("Proses cleaning");
@@ -97,8 +97,8 @@ public class Cleaning {
 
             System.out.println();
             //System.out.println(el);
-            System.out.println("Elemen div.post:");
-            System.out.println("==============>");
+            //System.out.println("Elemen div.post:");
+            //System.out.println("==============>");
 
             ArrayList<QA> arQA = new ArrayList<>();
 
@@ -119,7 +119,7 @@ public class Cleaning {
                 }
                 qa.id = i;
                 i++;
-                System.out.println(el2.text());
+                //System.out.println(el2.text());
                 isi = isi.replace(el2.text(),String.format(" [%d] ",qa.id));
             }
 
@@ -137,24 +137,26 @@ public class Cleaning {
                 String[] splitIsi = isi.split("\\[" + qa.id + "\\]");
                 if (splitIsi.length>1) {
                     //System.out.println("ans =" + splitIsi[1]);
+                    qa.teksSumber = oldIsi;
+                    qa.teksSumberProses = isi;
                     qa.anwser = splitIsi[1].replaceAll("\\[[0-9]+\\]"," ").trim(); //hapus quote yg lain kalau ada
+                    //jawaban kosong, ambil string di depan
                     if (qa.anwser.equals("")) {
                         System.out.println("******************************************************** answer kosong ******");
-                        //jawaban kosong, ambil string di depan
                         qa.anwser = splitIsi[0].replaceAll("\\[[0-9]+\\]"," ").trim(); //hapus quote yg lain kalau ada
                     }
                 }
             }
 
-            System.out.println("===");
-            System.out.println("isi awal:"+oldIsi);
-            System.out.println("isi setelah dipisahkan:"+isi);
-
-            System.out.println("Hasil ektraksi");
-            for (QA qa:arQA) {
-                System.out.println(qa);
+            if (arQA.size() > 0) {
+                System.out.println("======>");
+                System.out.println("isi awal:" + oldIsi);
+                System.out.println("isi setelah dipisahkan:" + isi);
+                System.out.println("Hasil ektraksi");
+                for (QA qa : arQA) {
+                    System.out.println(qa);
+                }
             }
-            System.out.println("=======>");
         }
     }
 
