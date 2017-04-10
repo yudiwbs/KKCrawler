@@ -6,7 +6,9 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -37,7 +39,7 @@ import java.util.Scanner;
 public class Cleaning {
 
     String inputDir = "";
-    String outputDir = "";
+    String outputFile = "";
 
     private class QA {
         int id;
@@ -57,14 +59,10 @@ public class Cleaning {
         }
     }
 
-    public void proses() {
-        //String strFile = "D:\\corpus\\kaskus\\mobilio\\mentah\\mobilio_00010.txt"; //untuk test
-        //String dir ="C:\\yudiwbs\\datamentah\\mentah\\";
-        String dir = "D:\\corpus\\kaskus\\mobilio\\mentah\\";
-        String file ="mobilio_00002.txt";
-        String strFile = dir+file;
-        System.out.println("Proses cleaning");
-        File input = new File(strFile);
+
+
+    private void prosesFile(File input,PrintWriter pw) {
+
         Document doc = null;
         try {
             doc = Jsoup.parse(input, "UTF-8", "");
@@ -95,7 +93,7 @@ public class Cleaning {
             String oldIsi = el.text();
             String isi = oldIsi;
 
-            System.out.println();
+            //System.out.println();
             //System.out.println(el);
             //System.out.println("Elemen div.post:");
             //System.out.println("==============>");
@@ -142,27 +140,72 @@ public class Cleaning {
                     qa.anwser = splitIsi[1].replaceAll("\\[[0-9]+\\]"," ").trim(); //hapus quote yg lain kalau ada
                     //jawaban kosong, ambil string di depan
                     if (qa.anwser.equals("")) {
-                        System.out.println("******************************************************** answer kosong ******");
+                        //System.out.println("******************************************************** answer kosong ******");
                         qa.anwser = splitIsi[0].replaceAll("\\[[0-9]+\\]"," ").trim(); //hapus quote yg lain kalau ada
                     }
                 }
             }
 
+
+            //nantinya output jadi dua file untuk dimasukkan ke data training
+
             if (arQA.size() > 0) {
-                System.out.println("======>");
-                System.out.println("isi awal:" + oldIsi);
-                System.out.println("isi setelah dipisahkan:" + isi);
-                System.out.println("Hasil ektraksi");
+                //System.out.println("======>");
+                //System.out.println("isi awal:" + oldIsi);
+                //System.out.println("isi setelah dipisahkan:" + isi);
+                //System.out.println("Hasil ektraksi");
                 for (QA qa : arQA) {
-                    System.out.println(qa);
+                    if (qa.question==null || qa.anwser==null) {
+                        System.out.println("Ada yang null...");
+                        System.out.println(qa.teksSumber);
+                        System.out.println(qa.teksSumberProses);
+                    } else {
+                        if (qa.question.equals("") || qa.anwser.equals("")) {
+                            System.out.println("Ada yang kosong...");
+                            System.out.println(qa);
+                        }
+                        qa.question = qa.question.trim();
+                        qa.anwser = qa.anwser.trim();
+                        //System.out.println(qa);
+                        pw.println(qa.question);
+                        pw.println("------>");
+                        pw.println(qa.anwser);
+                        pw.println("");
+                    }
                 }
             }
+
+
         }
+    }
+
+    public void proses() {
+        //String dir ="C:\\yudiwbs\\datamentah\\mentah\\";
+        //String dir = "D:\\corpus\\kaskus\\mobilio\\mentah\\";
+
+        System.out.println("Proses cleaning mulai");
+        final File dirFile = new File(inputDir);
+        try {
+            PrintWriter pw = new PrintWriter(outputFile);
+            for(final File child : dirFile.listFiles()) {
+                System.out.println("Proses file"+child.getAbsoluteFile());
+                prosesFile(child,pw);
+            }
+            pw.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("Proses cleaning selesai");
+        //String file ="mobilio_00002.txt";
     }
 
 
     public static void main(String[] args) {
         Cleaning c = new Cleaning();
+        c.inputDir = "C:\\yudiwbs\\datamentah\\mentah\\";
+        //c.inputDir = "C:\\yudiwbs\\datamentah\\mentah_kecil";
+        c.outputFile = "C:\\yudiwbs\\datamentah\\mentah_qa.txt";
         c.proses();
     }
 }
