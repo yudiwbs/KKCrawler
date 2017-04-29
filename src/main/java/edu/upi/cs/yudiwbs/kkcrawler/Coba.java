@@ -1,13 +1,11 @@
 package edu.upi.cs.yudiwbs.kkcrawler;
 
 import javax.swing.*;
-import java.io.BufferedReader;
-import java.io.Console;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Scanner;
 
 /**
  * Created by yudiwbs on 15/03/2017.
@@ -30,8 +28,10 @@ public class Coba {
 
     }
 
+
+
     public static void main(String[] args) {
-        final String passwd;
+        /*final String passwd;
         final String message = "Enter password";
         if( System.console() == null ) {
             final JPasswordField pf = new JPasswordField();
@@ -40,5 +40,15 @@ public class Coba {
                     ? new String( pf.getPassword() ) : "";
         } else
             passwd = new String( System.console().readPassword( "%s> ", message ) );
+        */
+        File fSinonim = new File("./resources/sinonim.txt");
+        try (Scanner sc = new Scanner(fSinonim)) {
+            while (sc.hasNext()) {
+                String s = sc.next();
+                System.out.println(s);
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -41,6 +41,19 @@ public class Cleaning {
     String inputDir = "";
     String outputFile = "";
 
+
+    private void loadSinonimStopWords() {
+        File fSinonim = new File("./resources/sinonim.txt");
+        try (Scanner sc = new Scanner(fSinonim)) {
+            while (sc.hasNext()) {
+                String s = sc.next();
+                System.out.println(s);
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
     private class QA {
         int id;
         String teksSumber;          //untuk debug: string lengkap quote dan jawaban
@@ -167,8 +180,9 @@ public class Cleaning {
                         qa.question = qa.question.trim();
                         qa.anwser = qa.anwser.trim();
                         //System.out.println(qa);
+                        pw.println("Q:");
                         pw.println(qa.question);
-                        pw.println("------>");
+                        pw.println("A:");
                         pw.println(qa.anwser);
                         pw.println("");
                     }
@@ -184,6 +198,8 @@ public class Cleaning {
         //String dir = "D:\\corpus\\kaskus\\mobilio\\mentah\\";
 
         System.out.println("Proses cleaning mulai");
+        System.out.println("Dir:"+inputDir);
+        //loop file dalam satu direktori
         final File dirFile = new File(inputDir);
         try {
             PrintWriter pw = new PrintWriter(outputFile);
@@ -203,9 +219,15 @@ public class Cleaning {
 
     public static void main(String[] args) {
         Cleaning c = new Cleaning();
-        c.inputDir = "C:\\yudiwbs\\datamentah\\mentah\\";
-        //c.inputDir = "C:\\yudiwbs\\datamentah\\mentah_kecil";
-        c.outputFile = "C:\\yudiwbs\\datamentah\\mentah_qa.txt";
+        //c.inputDir   = "C:\\yudiwbs\\datamentah\\mentah\\";
+        //c.inputDir   = "C:\\yudiwbs\\datamentah\\mentah_kecil";
+        //c.outputFile = "C:\\yudiwbs\\datamentah\\mentah_qa.txt";
+        //String dir   = "D:\\corpus\\kaskus\\mobilio\\mentah\\";
+
+        //String dir = "D:\\corpus\\kaskus\\mobilio\\mentah\\";
+
+        c.inputDir   = "D:\\corpus\\kaskus\\mobilio\\mentah-kecil";
+        c.outputFile = "D:\\corpus\\kaskus\\mobilio\\mentah-kecil-qa.txt";
         c.proses();
     }
 }
